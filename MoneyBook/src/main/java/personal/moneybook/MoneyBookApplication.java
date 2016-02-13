@@ -25,7 +25,5 @@ public class MoneyBookApplication implements CommandLineRunner {
 		log.info("초기 데이터 생성!!");
 		log.info(memberRepository.save(new Member(null, "강상규", 29)).toString());
 		log.info(memberRepository.save(new Member(null, "장현지", 24)).toString());
-		log.info(memberRepository.save(new Member(null, "장지희", 20)).toString());
-		log.info(memberRepository.save(new Member(null, "강명규", 27)).toString());
 	}
 }
