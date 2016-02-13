@@ -18,6 +18,8 @@ public class MoneyBookApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MoneyBookApplication.class, args);
+		System.out.println("커밋여러번하면그게다 올라가네!!222");
+		System.out.println("커밋여러번하면그게다 올라가네!!333");
 	}
 
 	@Override
