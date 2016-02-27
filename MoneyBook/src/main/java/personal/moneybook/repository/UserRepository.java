@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findOneByAge(int age);
 
-	// security-data 예제
+	// spring-security-data 예제
 	@Query("select u from User u where u.email = ?#{principal.Username}")
 	Optional<User> findMe();
 }

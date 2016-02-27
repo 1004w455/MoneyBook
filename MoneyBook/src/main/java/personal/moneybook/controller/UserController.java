@@ -37,21 +37,12 @@ public class UserController {
 	// this.userCreateFormValidator = userCreateFormValidator;
 	// }
 
-	@PreAuthorize("hasRole('ADMIN')")
-	@RequestMapping(value = "/me", method = RequestMethod.GET)
-	public ModelAndView me() {
-		ModelAndView mav = new ModelAndView("common/server_response");
-		mav.addObject("data", "당신은 어드민입니다.");
-		log.info("me 접속!");
-		return mav;
-	}
-
 	// @InitBinder("form")
 	// public void initBinder(WebDataBinder binder) {
 	// binder.addValidators(userCreateFormValidator);
 	// }
 
-	@PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
+	// @PreAuthorize("@currentUserServiceImpl.canAccessUser(principal, #id)")
 	@RequestMapping("/user/{id}")
 	public ModelAndView getUserPage(@PathVariable Long id) {
 		log.info("Getting user page for user={}", id);

@@ -21,8 +21,4 @@ public class AdminController {
 		return userRepository.findAll();
 	}
 
-	@RequestMapping(value = "/admin/me", method = RequestMethod.GET)
-	public User me() {
-		return userRepository.findMe().get();
-	}
 }

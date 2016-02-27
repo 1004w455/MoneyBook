@@ -1,34 +1,49 @@
 package personal.moneybook.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-// TODO 다른 예제는 이것들도 적용하던데 이유 파악해보자.
- @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+// TODO 다른 예제는 이것도 적용하던데 이유 파악해보자.
+// @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 메소드별 권한 설정에 필요
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	// 참고 : https://github.com/bkielczewski/example-spring-boot-security
+	// 참고 : http://www.slideshare.net/meadunhansa/ss-53303729
+
 	@Autowired
 	private UserDetailsService userDetailsService;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Bean // TODO salt 살트? 이거였나 랜덤키값 적용시켜 비밀번호 보호강화 시키기.
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	// 정적자원 이그노어 시키는 방법.
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/public/**", "/등등");
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http //
 				.authorizeRequests() //
-				.antMatchers("/", "/login", "/logout").permitAll() //
-				.antMatchers("/h2console/**").hasAuthority("ADMIN") //
-				.antMatchers("/admin/**").hasAuthority("ADMIN") //
+				.antMatchers("/").permitAll() //
+				.antMatchers("/admin/**", "/h2/**", "/private/**").hasAuthority("ADMIN") //
 				.antMatchers("/user/**").hasAnyAuthority("ADMIN", "USER") // .hasAuthority("USER")
 				.anyRequest().fullyAuthenticated()//
 				.and() //
@@ -61,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// TODO salt 살트? 이거였나 랜덤키값 적용시켜 비밀번호 보호강화 시키기.
-		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
 	}
+
 }

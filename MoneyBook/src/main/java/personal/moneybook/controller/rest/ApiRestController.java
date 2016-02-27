@@ -1,4 +1,4 @@
-package personal.moneybook.controller;
+package personal.moneybook.controller.rest;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import personal.moneybook.domain.User;
 import personal.moneybook.repository.UserRepository;
 
 @RestController
-public class ApiController {
+public class ApiRestController {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -23,9 +23,6 @@ public class ApiController {
 		return userRepository.findAll();
 	}
 
-	// TODO 메소드별로 접근 권한을 지정 할 수 있는데 뭘해도 적용이 안되네ㅠㅠ 좀더 파악해보자.
-	// @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	// @Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/api/{id}", method = RequestMethod.GET)
 	public User getById(@PathVariable Long id) {
 		return userRepository.findOne(id);

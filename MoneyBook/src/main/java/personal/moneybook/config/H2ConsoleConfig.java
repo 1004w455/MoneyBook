@@ -17,7 +17,7 @@ public class H2ConsoleConfig {
 	@Bean
 	ServletRegistrationBean h2servletRegistration() {
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
-		registrationBean.addUrlMappings("/h2console/*");
+		registrationBean.addUrlMappings("/h2/*");
 		return registrationBean;
 	}
 
