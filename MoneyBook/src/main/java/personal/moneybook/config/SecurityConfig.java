@@ -1,8 +1,11 @@
 package personal.moneybook.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -10,10 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 // TODO 다른 예제는 이것들도 적용하던데 이유 파악해보자.
-// @EnableGlobalMethodSecurity(prePostEnabled = true)
-// @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+ @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true) // 메소드별 권한 설정에 필요
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -40,10 +43,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutUrl("/signout") //
 				// .deleteCookies("JSESSIONID") // TODO 이거 뭐하는 녀석인지 파악해봐야함
 				.deleteCookies("remember-me") //
-				.logoutSuccessUrl("/").permitAll() //
+				.logoutSuccessUrl("/signin?signout").permitAll() //
 				.and() //
 				//
-				.rememberMe();
+				.rememberMe() //
+				.and() //
+				//
+				.exceptionHandling().accessDeniedPage("/403");
 
 		http.csrf().disable();
 		http.headers().frameOptions().disable(); // TODO 이 부분은 h2 console 사용하려고

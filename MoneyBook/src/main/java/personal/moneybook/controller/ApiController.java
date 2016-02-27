@@ -33,12 +33,12 @@ public class ApiController {
 
 	@RequestMapping(value = "/api/name/{name}", method = RequestMethod.GET)
 	public User getByName(@PathVariable String name) {
-		return userRepository.findOneByName(name);
+		return userRepository.findOneByName(name).get();
 	}
 
 	@RequestMapping(value = "/api/age/{age}", method = RequestMethod.GET)
 	public User getByAge(@PathVariable int age) {
-		return userRepository.findOneByAge(age);
+		return userRepository.findOneByAge(age).get();
 	}
 
 	@RequestMapping(value = "/api/create/{name}/{age}", method = RequestMethod.GET)

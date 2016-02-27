@@ -42,4 +42,5 @@ public class HomeController {
 		log.info("home 접속!");
 		return mav;
 	}
+
 }
