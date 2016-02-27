@@ -16,30 +16,33 @@ import personal.moneybook.repository.UserRepository;
 public class ApiController {
 
 	@Autowired
-	private UserRepository memberRepository;
+	private UserRepository userRepository;
 
 	@RequestMapping(value = "/api", method = RequestMethod.GET)
 	public List<User> getAll() {
-		return memberRepository.findAll();
+		return userRepository.findAll();
 	}
 
+	// TODO 메소드별로 접근 권한을 지정 할 수 있는데 뭘해도 적용이 안되네ㅠㅠ 좀더 파악해보자.
+	// @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	// @Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/api/{id}", method = RequestMethod.GET)
 	public User getById(@PathVariable Long id) {
-		return memberRepository.findOne(id);
+		return userRepository.findOne(id);
 	}
 
 	@RequestMapping(value = "/api/name/{name}", method = RequestMethod.GET)
 	public User getByName(@PathVariable String name) {
-		return memberRepository.findOneByName(name);
+		return userRepository.findOneByName(name);
 	}
 
 	@RequestMapping(value = "/api/age/{age}", method = RequestMethod.GET)
 	public User getByAge(@PathVariable int age) {
-		return memberRepository.findOneByAge(age);
+		return userRepository.findOneByAge(age);
 	}
 
 	@RequestMapping(value = "/api/create/{name}/{age}", method = RequestMethod.GET)
 	public User api1(@PathVariable String name, @PathVariable int age) {
-		return memberRepository.save(new User(null, name, "", Role.USER, name, age));
+		return userRepository.save(new User(null, name, "", Role.USER, name, age));
 	}
 }

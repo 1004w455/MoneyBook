@@ -2,6 +2,6 @@ package personal.moneybook.domain;
 
 public enum Role {
 
-	USER, ADMIN
+	USER, ADMIN, ETC
 
 }

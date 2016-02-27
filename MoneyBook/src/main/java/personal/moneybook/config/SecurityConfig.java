@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+// TODO 다른 예제는 이것들도 적용하던데 이유 파악해보자.
 // @EnableGlobalMethodSecurity(prePostEnabled = true)
 // @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @Configuration
@@ -20,32 +21,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		super.configure(http);
 		http //
-				// .formLogin() //
-				// .loginPage("/user/login")//
-				// .and()//
-				// //
-				// .logout()//
-				// .logoutUrl("/user/logout")//
-				// .deleteCookies("JSESSIONID")//
-				// .logoutSuccessUrl("/post/list")//
-				// .and() //
-				//
 				.authorizeRequests() //
-				.antMatchers("/").permitAll() //
-				.antMatchers("/h2console").hasRole("ADMIN") //
+				.antMatchers("/", "/login", "/logout").permitAll() //
+				.antMatchers("/h2console/**").hasAuthority("ADMIN") //
+				.antMatchers("/admin/**").hasAuthority("ADMIN") //
+				.antMatchers("/user/**").hasAnyAuthority("ADMIN", "USER") // .hasAuthority("USER")
 				.anyRequest().fullyAuthenticated()//
 				.and() //
 				//
-				.rememberMe()//
-				.and()//
+				.formLogin() //
+				.loginPage("/signin") //
+				.failureUrl("/signin?error") //
+				.usernameParameter("email").permitAll() //
+				.and() //
 				//
-				.csrf().disable();
+				.logout() //
+				.logoutUrl("/signout") //
+				// .deleteCookies("JSESSIONID") // TODO 이거 뭐하는 녀석인지 파악해봐야함
+				.deleteCookies("remember-me") //
+				.logoutSuccessUrl("/").permitAll() //
+				.and() //
+				//
+				.rememberMe();
+
+		http.csrf().disable();
+		http.headers().frameOptions().disable(); // TODO 이 부분은 h2 console 사용하려고
+													// 적용하였는데 뭐하는건진 정확히 모름.
+
+		super.configure(http); // TODO 예제들보면 이거 안넣어도 잘되는데 왜 내가 짠거는 안되는거야!!!
+								// 해결책으로 넣었음.
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		// TODO salt 살트? 이거였나 랜덤키값 적용시켜 비밀번호 보호강화 시키기.
 		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 }

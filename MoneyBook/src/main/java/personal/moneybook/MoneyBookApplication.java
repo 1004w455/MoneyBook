@@ -26,7 +26,11 @@ public class MoneyBookApplication implements CommandLineRunner {
 	public void run(String... arg0) throws Exception {
 		log.info("초기 데이터 생성!!");
 		BCryptPasswordEncoder password = new BCryptPasswordEncoder();
-		log.info(memberRepository.save(new User(null, "a@a.a", password.encode("123"), Role.ADMIN, "강상규", 29))
+		log.info(memberRepository.save(new User(null, "admin@a.a", password.encode("123"), Role.ADMIN, "강상규", 29))
+				.toString());
+		log.info(memberRepository.save(new User(null, "user@a.a", password.encode("123"), Role.USER, "유저", 19))
+				.toString());
+		log.info(memberRepository.save(new User(null, "etc@a.a", password.encode("123"), Role.ETC, "etc", 19))
 				.toString());
 	}
 }
