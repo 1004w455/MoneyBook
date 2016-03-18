@@ -13,6 +13,7 @@
 > - i18n 적용.
 > - java8 time 으로 적용 [jpa, DB, view]
 > - ssl 적용.
+> - Slack, Logback을 이용한 실시간 에러 모니터링 구현하기 [링크](http://brantiffy.axisj.com/archives/451)
 
 > **기능명세:**
 
