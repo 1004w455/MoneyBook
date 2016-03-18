@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    personal: DEBUG
+    org:
+      springframework: WARN
+      hibernate: WARN
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  jpa:
+    database: h2
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  redis:
+    host: 192.168.0.2
+    port: 56379
+#    password: password
