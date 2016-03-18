@@ -18,6 +18,7 @@
     	</sec:authorize>
 		<li><a href="/signin">signin</a></li>
 		<li><a href="/signout">signout</a></li>
+		<li>session id >>> <%= session.getId() %></li>
 	</ul>
 	Hello world! 하이욧 
 	<br>
