@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 import personal.moneybook.domain.User;
+import personal.moneybook.dto.UserDto;
 import personal.moneybook.service.user.UserService;
 
 @Slf4j
@@ -50,8 +51,7 @@ public class UserController {
 		Optional<User> user = userService.getUserById(id);
 		System.out.println(user);
 
-		return new ModelAndView("common/server_response", "data", userService.getUserById(id)
-				.orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
+		return new ModelAndView("common/server_response", "data", userService.getUserById(id).orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
 	}
 	//
 	// @PreAuthorize("hasAuthority('ADMIN')")
@@ -87,5 +87,12 @@ public class UserController {
 	// // ok, redirect
 	// return "redirect:/users";
 	// }
+
+
+	@RequestMapping(value = "/signup", method = RequestMethod.GET)
+	public void a(@Valid UserDto.Signup signup) {
+		System.out.println(signup.getEmail());
+		System.out.println(signup.getName());
+	}
 
 }
