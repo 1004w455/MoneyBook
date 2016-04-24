@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
@@ -47,11 +48,10 @@ public class UserController {
 	@RequestMapping("/user/{id}")
 	public ModelAndView getUserPage(@PathVariable Long id) {
 		log.info("Getting user page for user={}", id);
-
-		Optional<User> user = userService.getUserById(id);
+		// User user = userService.getUserById(id).orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id)));
+		User user = userService.getUserById(id).orElseThrow(() -> new NoSuchElementException("common/404_user")); // 이런식으로 사용하는게 맞나;;
 		System.out.println(user);
-
-		return new ModelAndView("common/server_response", "data", userService.getUserById(id).orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
+		return new ModelAndView("common/server_response", "data", user);
 	}
 	//
 	// @PreAuthorize("hasAuthority('ADMIN')")
@@ -88,11 +88,11 @@ public class UserController {
 	// return "redirect:/users";
 	// }
 
-
+	@ResponseBody
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public void a(@Valid UserDto.Signup signup) {
-		System.out.println(signup.getEmail());
-		System.out.println(signup.getName());
+	public boolean a(@Valid UserDto.Signup signup) {
+		// http://localhost:8080/signup?email=z@z.z&password=123&role=USER&name=kang&age=29
+		return userService.signup(signup);
 	}
 
 }

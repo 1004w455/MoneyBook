@@ -24,11 +24,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	// @Autowired
+	// private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	// @Bean
+	// public SecureRandom secureRandom() {
+	// SecureRandom random = new SecureRandom();
+	// random.nextBytes(new byte[10]);
+	// return random;
+	// }
 
 	@Bean // TODO salt 살트? 이거였나 랜덤키값 적용시켜 비밀번호 보호강화 시키기.
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		// SecureRandom random = new SecureRandom();
+		// random.nextBytes(new byte[20]);
+		// return new BCryptPasswordEncoder(256, random); // 왜 안되는지 모르겟다.
 		return new BCryptPasswordEncoder();
 	}
 
@@ -42,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http //
 				.authorizeRequests() //
-				.antMatchers("/").permitAll() //
+				.antMatchers("/", "/signup/**").permitAll() //
 				.antMatchers("/admin/**", "/h2/**", "/private/**").hasAuthority("ADMIN") //
 				.antMatchers("/user/**").hasAnyAuthority("ADMIN", "USER") // .hasAuthority("USER")
 				.anyRequest().fullyAuthenticated()//
@@ -76,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 
 }

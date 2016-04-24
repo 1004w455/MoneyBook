@@ -1,5 +1,7 @@
 package personal.moneybook;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,15 +26,16 @@ public class MoneyBookApplication implements CommandLineRunner {
 		SpringApplication.run(MoneyBookApplication.class, args);
 	}
 
+	@PostConstruct
+	public void init() {
+		log.info("초기 데이터 생성!! 11111");
+		log.info(memberRepository.save(new User(null, "admin@a.a", bCryptPasswordEncoder.encode("123"), Role.ADMIN, "강상규", 29)).toString());
+	}
+
 	@Override
 	public void run(String... arg0) throws Exception {
-		log.info("초기 데이터 생성!!");
-		log.info(memberRepository
-				.save(new User(null, "admin@a.a", bCryptPasswordEncoder.encode("123"), Role.ADMIN, "강상규", 29))
-				.toString());
-		log.info(memberRepository
-				.save(new User(null, "user@a.a", bCryptPasswordEncoder.encode("123"), Role.USER, "유저", 19)).toString());
-		log.info(memberRepository
-				.save(new User(null, "etc@a.a", bCryptPasswordEncoder.encode("123"), Role.ETC, "etc", 19)).toString());
+		log.info("초기 데이터 생성!! 22222");
+		log.info(memberRepository.save(new User(null, "user@a.a", bCryptPasswordEncoder.encode("123"), Role.USER, "유저", 19)).toString());
+		log.info(memberRepository.save(new User(null, "etc@a.a", bCryptPasswordEncoder.encode("123"), Role.ETC, "etc", 19)).toString());
 	}
 }
